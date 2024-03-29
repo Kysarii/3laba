@@ -4,64 +4,128 @@
 #После чего вычисляется выражение: (К*F)*А– K*AT . Выводятся по мере формирования А, F и все матричные операции последовательно.
 import random
 
-# Генерация матрицы A и ее подматриц (B, C, D, E)
-def generate_matrix(N):
-    A = [[0] * N for _ in range(N)]
+k = int(input())
+n = int(input())
+e = [[0] * (n // 2) for _ in range(n // 2)]
+b = [[0] * (n // 2) for _ in range(n // 2)]
+c = [[0] * (n // 2) for _ in range(n // 2)]
+d = [[0] * (n // 2) for _ in range(n // 2)]
+for i in range(n // 2):
+    for j in range(n // 2):
+        e[i][j] = random.randint(-10,10)
+        b[i][j] = random.randint(-10, 10)
+        c[i][j] = random.randint(-10, 10)
+        d[i][j] = random.randint(-10, 10)
 
-    # Генерация значений для подматриц B, C, D, E
-    for i in range(N):
-        for j in range(N):
-            if i >= N // 2 and j < N // 2:
-                A[i][j] = random.randint(-10, 10)
-            elif i >= N // 2 and j >= N // 2:
-                A[i][j] = random.randint(-10, 10)
-            elif i < N // 2 and j >= N // 2:
-                A[i][j] = random.randint(-10, 10)
-            else:
-                A[i][j] = random.randint(-10, 10)
+a = [[0] * n for _ in range(n)]
+for i in range(n // 2):
+    for j in range(n // 2):
+        a[i][j] = e[i][j]
+for i in range(n // 2, n):
+    for j in range(n // 2):
+        a[i][j] = d[i - n // 2][j]
+for i in range(n // 2):
+    for j in range(n // 2, n):
+        a[i][j] = b[i][j - n // 2]
+for i in range(n // 2, n):
+    for j in range(n // 2, n):
+        a[i][j] = c[i - n // 2][j - n // 2]
 
-    return A
+print("Матрица A")
+for i in range(len(a)):
+    for j in range(len(a)):
+        print("{:4d}".format(a[i][j]), end=' ')
+    print()
+print()
 
-# Формирование матрицы F
-def form_matrix_F(B, E):
-    min_in_odd_cols = min(E[i][j] > 0 for i in range(len(E) // 2) for j in range(len(E) // 2, len(E)))
-    sum_in_odd_rows = sum(B[i][j] < 0 for i in range(len(B) // 2, len(B)) for j in range(len(B) // 2, len(B)))
 
-    if min_in_odd_cols > sum_in_odd_rows:
-        n = len(B)
-        for i in range(n // 4, n // 2):
-            B[i], B[n - i - 1] = B[n - i - 1], B[i]
-    else:
-        B, E = E, B
+total_sum = 0
+for i in range(len(e) // 2 + 1, len(e)):
+    for j in range(len(e[i])):
+        if j % 2 != 0:
+            total_sum += e[i][j]
+print("Сумма элементов:", total_sum)
 
-    return B
+min_element = float('inf')
+for i in range(len(e) // 2 + 1):
+    for j in range(len(e[i])):
+        if j % 2 != 0:
+            min_element = min(min_element, e[i][j])
+print("Минимальный элемент:", min_element)
 
-# Вычисление выражения
-def calculate_F(K, F, A, AT):
-    result_matrix = [[(K * F[i][j]) * A[i][j] - K * AT[j][i] for j in range(len(F))] for i in range(len(F))]
-    return result_matrix
+f = [[0] * n for _ in range(n)]
+if min_element > total_sum:
+    for i in range(n // 2):
+        for j in range(n // 2):
+            f[i][j] = e[i][j]
+    for i in range(n // 2, n):
+        for j in range(n // 2):
+            f[i][j] = d[i - n // 2][j]
+    for i in range(n // 2, n):
+        for j in range(n // 2, n):
+            f[i][j] = b[i - n // 2][j - n // 2]
+    for i in range(n // 2):
+        for j in range(n // 2, n):
+            f[i][j] = c[i][j - n // 2]
+else:
+    for i in range(n // 2):
+        for j in range(n // 2):
+            f[i][j] = e[i][j]
+    for i in range(n // 2, n):
+        for j in range(n // 2):
+            f[i][j] = d[i - n // 2][j]
+    for i in range(n // 2):
+        for j in range(n // 2, n):
+            f[i][j] = b[i][j - n // 2]
+    for i in range(n // 2, n):
+        for j in range(n // 2, n):
+            f[i][j] = c[i - n // 2][j - n // 2]
 
-def main():
-    K = int(input("Введите число K: "))
-    N = int(input("Введите размер матрицы N (четное и больше 6): "))
+print("Матрица F, созданная по условию")
+for i in range(len(f)):
+    for j in range(len(f)):
+        print(f[i][j], end=' ')
+    print()
+print()
 
-    A = generate_matrix(N)
-    print("\nМатрица A:")
-    for row in A:
-        print(row)
 
-    B = [row[:N//2] for row in A[:N//2]]
-    E = [row[N//2:] for row in A[N//2:]]
+answer = [[0] * n for _ in range(n)]
+for i in range(n):
+    for j in range(n):
+        for k in range(n):
+            answer[i][j] += (k * f[i][k]) * a[k][j]
 
-    F = form_matrix_F(B, E)
-    print("\n Матрица F:")
-    for row in F:
-        print(row)
-    AT = [[row[i] for row in A] for i in range(len(A))]
-    result_matrix = calculate_F(K, F, A, AT)
+print("Матрица (K*F)*A")
+for i in range(len(answer)):
+    for j in range(len(answer)):
+        print(answer[i][j], end=' ')
+    print()
+print()
 
-    print("\n Результат выражения (K*F)*A - K * A^T:")
-    for row in result_matrix:
-        print(row)
 
-main()
+change = [[False] * (n) for _ in range(n)]
+for i in range(len(a)):
+    for j in range(len(a)):
+        if change[i][j] == False:
+            a[i][j], a[j][i] = a[j][i], a[i][j]
+            change[i][j] = change[j][i] = True
+
+
+print("Матрица A^T")
+for i in range(len(a)):
+    for j in range(len(a)):
+        print(a[i][j], end=' ')
+    print()
+print()
+
+answer1 = [[0] * n for _ in range(n)]
+for i in range(n):
+    for j in range(n):
+        for k in range(n):
+            answer1[i][j] += answer[i][k] - (k * a[k][j])
+print("Матрица (K*(A*F))*F^T")
+for i in range(len(answer1)):
+    for j in range(len(answer1)):
+        print(answer1[i][j], end=' ')
+    print()
+print()
