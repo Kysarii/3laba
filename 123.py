@@ -4,8 +4,8 @@
 #После чего вычисляется выражение: (К*F)*А– K*AT . Выводятся по мере формирования А, F и все матричные операции последовательно.
 import random
 
-k = int(input())
-n = int(input())
+k = int(input("Введите k: "))
+n = int(input("Введите n (четное и больше или равно 6): "))
 e = [[0] * (n // 2) for _ in range(n // 2)]
 b = [[0] * (n // 2) for _ in range(n // 2)]
 c = [[0] * (n // 2) for _ in range(n // 2)]
@@ -123,7 +123,7 @@ for i in range(n):
     for j in range(n):
         for k in range(n):
             answer1[i][j] += answer[i][k] - (k * a[k][j])
-print("Матрица (K*(A*F))*F^T")
+print("Матрица (К*F)*А– K*A^T")
 for i in range(len(answer1)):
     for j in range(len(answer1)):
         print(answer1[i][j], end=' ')
