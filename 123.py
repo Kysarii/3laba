@@ -13,16 +13,10 @@ import random
 
 k = int(input("Введите k: "))
 n = int(input("Введите n (четное и больше или равно 6): "))
-e = [[0] * (n // 2) for _ in range(n // 2)]
-b = [[0] * (n // 2) for _ in range(n // 2)]
-c = [[0] * (n // 2) for _ in range(n // 2)]
-d = [[0] * (n // 2) for _ in range(n // 2)]
-for i in range(n // 2):
-    for j in range(n // 2):
-        e[i][j] = random.randint(-10,10)
-        b[i][j] = random.randint(-10, 10)
-        c[i][j] = random.randint(-10, 10)
-        d[i][j] = random.randint(-10, 10)
+b = [[random.randint(-10, 10) for i in range(n//2)] for j in range(n//2)]
+c = [[random.randint(-10, 10) for i in range(n//2)] for j in range(n//2)]
+d = [[random.randint(-10, 10) for i in range(n//2)] for j in range(n//2)]
+e = [[random.randint(-10, 10) for i in range(n//2)] for j in range(n//2)]
 
 a = [[0] * n for _ in range(n)]
 for i in range(n // 2):
@@ -30,13 +24,13 @@ for i in range(n // 2):
         a[i][j] = e[i][j]
 for i in range(n // 2, n):
     for j in range(n // 2):
-        a[i][j] = d[i - n // 2][j]
+        a[i][j] = d[i - n // 2 -1][j]
 for i in range(n // 2):
     for j in range(n // 2, n):
-        a[i][j] = b[i][j - n // 2]
+        a[i][j] = b[i][j - n // 2-1]
 for i in range(n // 2, n):
     for j in range(n // 2, n):
-        a[i][j] = c[i - n // 2][j - n // 2]
+        a[i][j] = c[i -n // 2-1][j - n // 2-1]
 
 print("Матрица A")
 for i in range(len(a)):
@@ -46,19 +40,21 @@ for i in range(len(a)):
 print()
 
 
-total_sum = 0
-for i in range(len(e) // 2 + 1, len(e)):
-    for j in range(len(e[i])):
-        if j % 2 != 0:
-            total_sum += e[i][j]
-print("Сумма элементов:", total_sum)
-
 min_element = float('inf')
-for i in range(len(e) // 2 + 1):
-    for j in range(len(e[i])):
-        if j % 2 != 0:
-            min_element = min(min_element, e[i][j])
+for i in range(n // 2+1):
+    for j in range(i, n - i):
+        if i < len(e) and j < len(e[i]):
+            if j % 2 != 0:
+                min_element = min(min_element, e[i][j])
 print("Минимальный элемент:", min_element)
+
+total_sum = 0
+for i in range(n // 2, n):
+    for j in range(n - i - 1, i + 1):
+        if i < len(e) and j < len(e[i]):
+            if i % 2 != 0:
+                total_sum += e[i][j]
+print("Сумма элементов:", total_sum)
 
 f = [[0] * n for _ in range(n)]
 if min_element > total_sum:
