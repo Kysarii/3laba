@@ -11,124 +11,129 @@
                                         3 """
 import random
 
-k = int(input("Введите k: "))
-n = int(input("Введите n (четное и больше или равно 6): "))
-b = [[random.randint(-10, 10) for i in range(n//2)] for j in range(n//2)]
-c = [[random.randint(-10, 10) for i in range(n//2)] for j in range(n//2)]
-d = [[random.randint(-10, 10) for i in range(n//2)] for j in range(n//2)]
-e = [[random.randint(-10, 10) for i in range(n//2)] for j in range(n//2)]
+# Вводим K и N с клавиатуры
+K = int(input("Введите значение K: "))
+N = int(input("Введите значение N: "))
 
-a = [[0] * n for _ in range(n)]
-for i in range(n // 2):
-    for j in range(n // 2):
-        a[i][j] = e[i][j]
-for i in range(n // 2, n):
-    for j in range(n // 2):
-        a[i][j] = d[i - n // 2 -1][j]
-for i in range(n // 2):
-    for j in range(n // 2, n):
-        a[i][j] = b[i][j - n // 2-1]
-for i in range(n // 2, n):
-    for j in range(n // 2, n):
-        a[i][j] = c[i -n // 2-1][j - n // 2-1]
+' Создаем матрицы B, C, D, E и заполняем их случайными числами'
+B = [[random.randint(-10, 10) for j in range(N//2)] for i in range(N//2)]
+C = [[random.randint(-10, 10) for j in range(N//2)] for i in range(N//2)]
+D = [[random.randint(-10, 10) for j in range(N//2)] for i in range(N//2)]
+E = [[random.randint(-10, 10) for j in range(N//2)] for i in range(N//2)]
+
+'Создаем матрицу А'
+A = [[0] * N for _ in range(N)]
+for i in range(N // 2):
+    for j in range(N // 2):
+        A[i][j] = E[i][j]
+for i in range(N // 2, N):
+    for j in range(N // 2):
+        A[i][j] = D[i - N // 2 -1][j]
+for i in range(N // 2):
+    for j in range(N // 2, N):
+        A[i][j] = B[i][j - N // 2-1]
+for i in range(N // 2, N):
+    for j in range(N // 2, N):
+        A[i][j] = C[i -N // 2-1][j - N // 2-1]
 
 print("Матрица A")
-for i in range(len(a)):
-    for j in range(len(a)):
-        print("{:4d}".format(a[i][j]), end=' ')
+for i in range(len(A)):
+    for j in range(len(A)):
+        print("{:4d}".format(A[i][j]), end=' ')
     print()
 print()
 
-
-min_element = float('inf')
-for i in range(n // 2+1):
-    for j in range(i, n - i):
-        if i < len(e) and j < len(e[i]):
+min_element = 0
+'2 область в E'
+for i in range((N // 2)):
+    for j in range(i, (N // 2) - i):
+        if i < len(E) and j < len(E[i]):
             if j % 2 != 0:
-                min_element = min(min_element, e[i][j])
+                min_element = min(min_element, E[i][j])
 print("Минимальный элемент:", min_element)
 
 total_sum = 0
-for i in range(n // 2, n):
-    for j in range(n - i - 1, i + 1):
-        if i < len(e) and j < len(e[i]):
+'4 область в E'
+for i in range((N // 2) // 2, N // 2):
+    for j in range((N // 2) - i - 1, i + 1):
+        if i < len(E) and j < len(E[i]):
             if i % 2 != 0:
-                total_sum += e[i][j]
+                total_sum += E[i][j]
 print("Сумма элементов:", total_sum)
 
-f = [[0] * n for _ in range(n)]
+F = [[0] * N for _ in range(N)]
 if min_element > total_sum:
-    for i in range(n // 2):
-        for j in range(n // 2):
-            f[i][j] = e[i][j]
-    for i in range(n // 2, n):
-        for j in range(n // 2):
-            f[i][j] = d[i - n // 2][j]
-    for i in range(n // 2, n):
-        for j in range(n // 2, n):
-            f[i][j] = b[i - n // 2][j - n // 2]
-    for i in range(n // 2):
-        for j in range(n // 2, n):
-            f[i][j] = c[i][j - n // 2]
+    for i in range(N // 2):
+        for j in range(N // 2):
+            F[i][j] = E[i][j]
+    for i in range(N // 2, N):
+        for j in range(N // 2):
+            F[i][j] = D[i - N // 2][j]
+    for i in range(N // 2, N):
+        for j in range(N // 2, N):
+            F[i][j] = B[i - N // 2][j - N // 2]
+    for i in range(N // 2):
+        for j in range(N // 2, N):
+            F[i][j] = C[i][j - N // 2]
 else:
-    for i in range(n // 2):
-        for j in range(n // 2):
-            f[i][j] = e[i][j]
-    for i in range(n // 2, n):
-        for j in range(n // 2):
-            f[i][j] = d[i - n // 2][j]
-    for i in range(n // 2):
-        for j in range(n // 2, n):
-            f[i][j] = b[i][j - n // 2]
-    for i in range(n // 2, n):
-        for j in range(n // 2, n):
-            f[i][j] = c[i - n // 2][j - n // 2]
+    for i in range(N // 2):
+        for j in range(N // 2):
+            F[i][j] = E[i][j]
+    for i in range(N // 2, N):
+        for j in range(N // 2):
+            F[i][j] = D[i - N // 2][j]
+    for i in range(N // 2):
+        for j in range(N // 2, N):
+            F[i][j] = B[i][j - N // 2]
+    for i in range(N // 2, N):
+        for j in range(N // 2, N):
+            F[i][j] = C[i - N // 2][j - N // 2]
 
 print("Матрица F, созданная по условию")
-for i in range(len(f)):
-    for j in range(len(f)):
-        print(f[i][j], end=' ')
+for i in range(len(F)):
+    for j in range(len(F)):
+        print("{:4d}".format(F[i][j]), end=' ')
     print()
 print()
 
 
-answer = [[0] * n for _ in range(n)]
-for i in range(n):
-    for j in range(n):
-        for k in range(n):
-            answer[i][j] += (k * f[i][k]) * a[k][j]
+answer = [[0] * N for _ in range(N)]
+for i in range(N):
+    for j in range(N):
+        for k in range(N):
+            answer[i][j] += (k * F[i][k]) * A[k][j]
 
 print("Матрица (K*F)*A")
 for i in range(len(answer)):
     for j in range(len(answer)):
-        print(answer[i][j], end=' ')
+        print("{:4d}".format(answer[i][j]), end=' ')
     print()
 print()
 
 
-change = [[False] * (n) for _ in range(n)]
-for i in range(len(a)):
-    for j in range(len(a)):
+change = [[False] * (N) for _ in range(N)]
+for i in range(len(A)):
+    for j in range(len(A)):
         if change[i][j] == False:
-            a[i][j], a[j][i] = a[j][i], a[i][j]
+            A[i][j], A[j][i] = A[j][i], A[i][j]
             change[i][j] = change[j][i] = True
 
 
 print("Матрица A^T")
-for i in range(len(a)):
-    for j in range(len(a)):
-        print(a[i][j], end=' ')
+for i in range(len(A)):
+    for j in range(len(A)):
+        print("{:4d}".format(A[i][j]), end=' ')
     print()
 print()
 
-answer1 = [[0] * n for _ in range(n)]
-for i in range(n):
-    for j in range(n):
-        for k in range(n):
-            answer1[i][j] += answer[i][k] - (k * a[k][j])
+answer1 = [[0] * N for _ in range(N)]
+for i in range(N):
+    for j in range(N):
+        for k in range(N):
+            answer1[i][j] += answer[i][k] - (k * A[k][j])
 print("Матрица (К*F)*А– K*A^T")
 for i in range(len(answer1)):
     for j in range(len(answer1)):
-        print(answer1[i][j], end=' ')
+        print("{:4d}".format(answer1[i][j]), end=' ')
     print()
 print()
